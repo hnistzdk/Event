@@ -1,0 +1,62 @@
+package Study.Java_GUI;/**
+ * @Description
+ * @Author zdk
+ * @Date 2020/10/22 17:48
+ */
+
+import javafx.application.Application;
+import javafx.scene.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
+public class mouseAndKeyEvent extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+    private double textX,textY;
+    Text text=new Text(50,50,"拖动文本框");
+    @Override
+    public void start(Stage primaryStage) {
+        Pane pane=new Pane();
+        pane.getChildren().add(text);
+        Scene scene=new Scene(pane,200,200);
+        text.setOnMousePressed(e->mousePressed(e));
+        text.setOnMouseReleased(e->mouseReleased(e));
+        text.setOnKeyPressed(e->{
+            switch (e.getCode())
+            {
+                case UP:
+                case KP_UP:
+                    text.setY(text.getY()-5);break;
+                case DOWN:
+                case KP_DOWN:
+                    text.setY(text.getY()+5);break;
+                case LEFT:
+                case KP_LEFT:
+                    text.setX(text.getX()-5);break;
+                case RIGHT:
+                case KP_RIGHT:
+                    text.setX(text.getX()+5);break;
+                default:
+                    text.setText(e.getText());
+            }
+        });
+
+        primaryStage.setTitle("通过鼠标拖动文本及通过方向键移动文本");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        text.requestFocus();//设置文本对象获得焦点,接受用户输入
+    }
+
+    public void mousePressed(MouseEvent event){
+        textX=event.getX()-text.getX();
+        textY=event.getY()-text.getY();
+    }
+    public void mouseReleased(MouseEvent event){
+        text.setX(event.getSceneX()-textX);
+        text.setY(event.getSceneY()-textY);
+    }
+}
